@@ -92,7 +92,7 @@
 
         // Conectamos a la Base de Datos MySQL con PHP e imprimimos los items, cerramos la Conexion por seguridad.
 
-        $mysqli = new mysqli('localhost','collecti','94xo5T2Cvp','collecti_blog');
+        $mysqli = new mysqli('localhost','mibd','mipass','mibd');
                       
         if ($mysqli->connect_error) {
             die('Error : ('. $mysqli->connect_errno .') '. $mysqli->connect_error);
