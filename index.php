@@ -90,29 +90,9 @@
 
       <?php
 
-        // Conectamos a la Base de Datos MySQL con PHP e imprimimos los items, cerramos la Conexion por seguridad.
-
-        $mysqli = new mysqli('localhost','miuser','mipass','mibd');
-                      
-        if ($mysqli->connect_error) {
-            die('Error : ('. $mysqli->connect_errno .') '. $mysqli->connect_error);
-        }
-
-            $results = $mysqli->query("SELECT id, nombre, precio, stock FROM postres");
-                      
-            echo "var datosTabla=[";
-            while($row = $results->fetch_object()) {
-            echo "{";
-            echo "id:'".$row->id."',";
-            echo "nombre:'". $row->nombre."',";
-            echo "precio:'". $row->precio."',";
-            echo "stock:'". $row->stock."'},";           
-            }
-
-            echo "];";
-
-             $mysqli->close();
-       ?>
+        include("data.php");
+          
+      ?>
 
       // A traves de React JS le indicamos que renderize todo el contenido en las etiquetas HTML <body></body>
       React.render(<InstantBox data={datosTabla}/>,document.body);      
