@@ -9,11 +9,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
   </head>
   <body>
-    <div class="container">
-      <div class="row">
-        <div class="col-md-12" >
-          <div id="contenido"></div>
-
+    
     <script type="text/jsx">
       var SearchBox = React.createClass({
           doSearch:function(){
@@ -22,7 +18,13 @@
           },
           render:function(){
             // Mostramos el input text para Buscar los items
-              return <input type="text" className="form-control" ref="searchInput" placeholder="Ingrese el Nombre del Postre que desea Buscar" value={this.props.query} onChange={this.doSearch}/>
+              return(
+                <div className="row">
+                  <div className="col-md-12">
+                    <input type="text" className="form-control" ref="searchInput" placeholder="Ingrese el Nombre del Postre que desea Buscar" value={this.props.query} onChange={this.doSearch}/>
+                  </div>
+                </div>
+                );
           }
       });
 
@@ -31,21 +33,25 @@
               //Hacemos que las filas se muestren en la tabla
               var rows=[];
               this.props.data.forEach(function(postre) {
-              rows.push(<tr><td>{postre.id}</td><td>{postre.nombre}</td><td>{postre.precio}</td><td>{postre.stock}</td></tr>)
+              rows.push(<tr><td className="text-center">{postre.id}</td><td className="text-center">{postre.nombre}</td><td className="text-center">S/. {postre.precio}</td><td className="text-center">{postre.stock}</td></tr>)
               });
               //Devolvemos la Tabla HTML
               return(
-                   <table className="table table-hover table-bordered">
-                      <thead>
+                  <div className="row">
+                    <div className="col-md-12" >
+                      <table className="table table-hover table-bordered">
+                        <thead>
                           <tr>
-                              <th>ID</th>
-                              <th>Nombre</th>
-                              <th>Precio</th>
-                              <th>Stock</th>
-                          </tr>
-                      </thead>
-                      <tbody>{rows}</tbody>
-                  </table>               
+                            <th className="text-center">ID</th>
+                            <th className="text-center">Nombre</th>
+                            <th className="text-center">Precio</th>
+                            <th className="text-center">Stock</th>
+                            </tr>
+                        </thead>
+                        <tbody>{rows}</tbody>
+                      </table>
+                    </div>
+                  </div>               
               );
           }
       });
@@ -74,6 +80,7 @@
           render:function(){
               return (
                 // Renderizamos la tabla HTML, las filas y el frontend de React JS
+                <div className="container">
                   <div className="InstantBox">
                       <h1>Buscar en tiempo real con ReactJS, PHP, MySQL y Boostrap.</h1>
                       <SearchBox query={this.state.query} doSearch={this.doSearch}/>
@@ -84,23 +91,21 @@
                         Desarrollado por <a href="http://www.collectivecloudperu.com" target="_blank">Collective Cloud Peru</a>
                       </div>
                   </div>
+                </div>
               );
           }
       });
 
       <?php
 
-        include("data.php");
-          
+      include("data.php");
+        
       ?>
 
       // A traves de React JS le indicamos que renderize todo el contenido en las etiquetas HTML <body></body>
       React.render(<InstantBox data={datosTabla}/>,document.body);      
 
     </script>
-
-    </div>
-    </div>
-    </div>
+    
   </body>
 </html>
