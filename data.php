@@ -3,6 +3,7 @@
     // Conectamos a la Base de Datos MySQL con PHP e imprimimos los items, cerramos la Conexion por seguridad.
 
         $mysqli = new mysqli('localhost','user','password','BD');
+        $mysqli->query("SET NAMES 'utf8'");
 
         if ($mysqli->connect_error) {
             die('Error : ('. $mysqli->connect_errno .') '. $mysqli->connect_error);
