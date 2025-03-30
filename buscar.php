@@ -9,7 +9,7 @@
     $servername = "localhost"; // Servidor (localhost si es en local)
     $username = "root"; // Usuario de MySQL
     $password = ""; // Contraseña de MySQL
-    $dbname = "test"; // Nombre de la base de datos
+    $dbname = "nombre-de-tu-bd"; // Nombre de la base de datos
 
     // Conectamos a la base de datos
     $conn = new mysqli($servername, $username, $password, $dbname);
