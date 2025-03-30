@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo: Buscar en tiempo real con React JS, PHP, MySQL y Bootstrap</title>
+    
+    <!-- Bootstrap 5 para el diseño -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- React y ReactDOM desde CDNs para usar sin Node.js -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    
+    <!-- Babel para poder escribir JSX en este archivo -->
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+</head>
+<body class="bg-light">
+    <div class="container mt-4">
+        <h1 class="text-center mb-4">Demo: Buscar en tiempo real con React JS, PHP, MySQL y Bootstrap</h1>
+        <div id="root"></div>
+    </div>
+
+    <script type="text/babel">
+        function Search() {
+            // Estados para manejar la búsqueda y los postres
+            const [query, setQuery] = React.useState(""); // Guarda el texto del buscador
+            const [postres, setPostres] = React.useState([]); // Guarda todos los postres desde la BD
+            const [filteredPostres, setFilteredPostres] = React.useState([]); // Guarda los postres filtrados
+
+            // Cargar los postres cuando se monta el componente
+            React.useEffect(() => {
+                fetch("buscar.php") // Llamamos al backend en PHP
+                    .then(response => response.json())
+                    .then(data => {
+                        setPostres(data); // Guardamos todos los postres en el estado
+                        setFilteredPostres(data); // Al inicio, mostramos todos los postres
+                    });
+            }, []);
+
+            // Función para filtrar los postres en tiempo real
+            const handleSearch = (e) => {
+                const searchTerm = e.target.value.toLowerCase(); // Convertimos a minúsculas para evitar errores
+                setQuery(searchTerm); // Guardamos la búsqueda en el estado
+
+                // Filtramos los postres sin hacer más peticiones al servidor
+                const filtered = postres.filter(postre =>
+                    postre.nombre.toLowerCase().includes(searchTerm)
+                );
+
+                setFilteredPostres(filtered); // Actualizamos la lista filtrada
+            };
+
+            return (
+                <div className="card shadow p-4">
+                    {/* Input para escribir el texto de búsqueda */}
+                    <input 
+                        type="text" 
+                        className="form-control mb-3"
+                        placeholder="Ingrese el Nombre del Postre que desea Buscar" 
+                        value={query} 
+                        onChange={handleSearch} // Se ejecuta cada vez que el usuario escribe
+                    />
+                    
+                    {/* Tabla donde se listan los postres */}
+                    <div className="table-responsive">
+                        <table className="table table-bordered table-hover">
+                            <thead className="table-dark">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nombre</th>
+                                    <th>Precio</th>
+                                    <th>Stock</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {/* Si hay postres filtrados, los mostramos en la tabla */}
+                                {filteredPostres.length > 0 ? (
+                                    filteredPostres.map((postre) => (
+                                        <tr key={postre.id}>
+                                            <td>{postre.id}</td>
+                                            <td>{postre.nombre}</td>
+                                            <td>${postre.precio}</td>
+                                            <td>{postre.stock}</td>
+                                        </tr>
+                                    ))
+                                ) : (
+                                    // Si no hay resultados, mostramos un mensaje en la tabla
+                                    <tr>
+                                        <td colSpan="4" className="text-center">No se encontraron resultados</td>
+                                    </tr>
+                                )}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            );
+        }
+
+        // Renderizamos el componente en el div con id "root"
+        ReactDOM.createRoot(document.getElementById("root")).render(<Search />);
+    </script>
+</body>
+</html>
